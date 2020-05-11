@@ -202,7 +202,7 @@ ggplot(dbtab3, aes(x= Species, y=Prevalence,fill=Forest))+
   scale_fill_viridis_d(begin=0.5,direction=-1)+
   theme(legend.position = "top")+ylab("Prevalence (%)")
 
-ggsave("Figure2.tiff",dpi=300,width = 8,height=5)
+ggsave("Figure2.tiff",dpi=300,width = 8,height=5,compression = "lzw")
 ggsave("Figure2.pdf",dpi=300,width = 8,height=5)
 
 
