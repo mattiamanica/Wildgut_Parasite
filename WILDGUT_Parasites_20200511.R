@@ -378,8 +378,8 @@ summary(m2)
 library(multcomp)
 m3 <- glht(m2, linfct = mcp(Forest_Species = "Tukey"))
 m3
-#tiff("PairWise_v2.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
-pdf("Figure4.pdf", width = 6, height = 4)
+tiff("Figure4.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
+#pdf("Figure4.pdf", width = 6, height = 4)
 par(mar=c(3.5,9,2,2))
 plot(m3,main="",xlab="")
 mtext(text="95% family-wise confidence level",side=3,line=0.5,font=2,cex=1.2)
@@ -399,8 +399,8 @@ X$lo <- exp(mu-1.96*sd)
 X
 
 
-#tiff("Histogram_v3.tiff", width = 7, height = 10, units = 'in', res = 300,compression = 'lzw')
-pdf("Figure3.pdf", width = 4, height = 6)
+tiff("Figure3.tiff", width = 6, height = 7.5, units = 'in', res = 300,compression = 'lzw')
+#pdf("Figure3.pdf", width = 4, height = 6)
 par(mfrow=c(2,1))
 counts <- table(subset(db0,Species=="Colobus")$Forest,subset(db0,Species=="Colobus")$Richness)
 counts <-cbind(as.matrix(counts),matrix(0,ncol=2,nrow=2))
@@ -437,8 +437,8 @@ dev.off()
 #ggsave("Fig_Table2.pdf",dpi=300,width = 8,height=5)
 
 
-#tiff("Histogram_v3.tiff", width = 7, height = 10, units = 'in', res = 300,compression = 'lzw')
-pdf("Figure3.pdf", width = 5, height = 7)
+tiff("Figure3.tiff", width = 7, height = 10, units = 'in', res = 300,compression = 'lzw')
+#pdf("Figure3.pdf", width = 5, height = 7)
 par(mfrow=c(2,1))
 counts <- table(subset(db0,Species=="Colobus")$Forest,subset(db0,Species=="Colobus")$Richness)
 counts <-cbind(as.matrix(counts),matrix(0,ncol=2,nrow=2))
