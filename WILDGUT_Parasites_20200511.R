@@ -214,7 +214,7 @@ ggplot(dbtab3, aes(x= Species, y=Prevalence,fill=Forest))+
   theme(legend.position = "top")+ylab("Prevalence (%)")
 
 
-ggsave("Figure2.tiff",dpi=300,width = 8,height=5)
+ggsave("Figure2.tiff",dpi=300,width = 8,height=5,compression = "lzw")
 ggsave("Figure2.pdf",dpi=300,width = 8,height=5)
 
 
@@ -222,54 +222,11 @@ ggsave("Figure2.pdf",dpi=300,width = 8,height=5)
 
 db0$Richness2 <- apply(db0[,c(11:20)]>0,1,sum)
 db0$Richness  <- apply(db0[,c(11:16)]>0,1,sum)
-for(i in 1:nrow(db0)){
-  p = (db0[i,c(11:16)]/sum(db0[i,c(11:16)]))
-  db0$simps[i] <- sum(p^2)
-}
-for(i in 1:nrow(db0)){
-  p <- (db0[i,c(11:20)]/sum(db0[i,c(11:20)]))
-  db0$shan[i] <- -sum(p[p>0]*log(p[p>0]))
-}
-plot(db0$simps)
-hist(db0$simps)
-mean(db0$simps==0)
-
-plot(db0$shan)
-hist(db0$shan)
-mean(db0$simps==0)
-
-
-plot(db0$shan,db0$simps)
-plot(db0$Richness,db0$simps)
-
 
 
 db0$AltitudeSD <- (db0$Altitude - mean(db0$Altitude))/sd(db0$Altitude)
 db0$Species <- relevel(db0$Species, ref = "Colobus")
 db0$Forest_Species <- interaction(db0$Forest,db0$Species)# per dopo
-
-db0s <- subset(db0,!is.na(db0$simps))
-m0 <- lm(simps~Forest_Species , data=db0s)
-m0 <- lm(simps~Forest*Species , data=db0s)
-summary(m0)
-plot(m0)
-
-library(multcomp)
-m3 <- glht(m0, linfct = mcp(Forest_Species = "Tukey"))
-m3
-#tiff("PairWise_v2.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
-pdf("FigureS4.pdf", width = 6, height = 4)
-par(mar=c(3.5,9,2,2))
-plot(m3,main="",xlab="")
-mtext(text="95% family-wise confidence level",side=3,line=0.5,font=2,cex=1.2)
-mtext(text="Linear Function",side=1,line=2,font=1,cex=1.2)
-dev.off()
-
-
-
-
-
-
 
 nrow(db0)
 table(db0$Richness==0)
@@ -323,8 +280,8 @@ summary(m2)
 library(multcomp)
 m3 <- glht(m2, linfct = mcp(Forest_Species = "Tukey"))
 m3
-#tiff("PairWise_v2.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
-pdf("Figure4.pdf", width = 6, height = 4)
+tiff("Figure4.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
+#pdf("Figure4.pdf", width = 6, height = 4)
 par(mar=c(3.5,9,2,2))
 plot(m3,main="",xlab="")
 mtext(text="95% family-wise confidence level",side=3,line=0.5,font=2,cex=1.2)
@@ -345,8 +302,8 @@ X$lo <- exp(mu-1.96*sd)
 X
 
 
-#tiff("Histogram_v3.tiff", width = 7, height = 10, units = 'in', res = 300,compression = 'lzw')
-pdf("Figure3.pdf", width = 5, height = 6)
+tiff("Figure3.tiff", width = 6, height = 7.5, units = 'in', res = 300,compression = 'lzw')
+#pdf("Figure3.pdf", width = 5, height = 6)
 par(mfrow=c(2,1))
 counts <- table(subset(db0,Species=="Colobus")$Forest,subset(db0,Species=="Colobus")$Richness)
 counts <-cbind(as.matrix(counts),matrix(0,ncol=2,nrow=2))
@@ -563,6 +520,42 @@ write.table(final,quote = FALSE,row.names = FALSE,sep="|",
 ########################################
 ########################################
 
+tiff("FigureS1.tiff", width = 6, height = 7.5, units = 'in', res = 300,compression = 'lzw')
+#pdf("Figure3.pdf", width = 5, height = 6)
+par(mfrow=c(2,1))
+counts <- table(subset(db0,Species=="Colobus")$Forest,subset(db0,Species=="Colobus")$Richness2)
+counts <-cbind(as.matrix(counts),matrix(0,ncol=4,nrow=2))
+colnames(counts)[5:8] <- c("4","5","6","7")
+par(mar=c(1,4,0,1))
+df.bar <- barplot(as.matrix(counts), ylab="",
+                  xlab="", col=c("dodgerblue","orange"),
+                  beside=TRUE,ylim=c(0,29))
+mtext("Number of samples",side=2,line=2.5,cex=1.,font=2)
+legend("right", rownames(counts),fill = c("dodgerblue","orange"), bty = "n")
+df.bar
+text(1,27,"A",cex=1)
+text(15,27,substitute(italic("Procolobus gordonorum")),cex=1)
+points(1.5+3*X$lambda[1:2],c(22,23),pch=19,col=c("dodgerblue","orange"))
+segments(x0 = 1.5+3*X$lo[1], y0=22, x1 = 1.5+3*X$hi[1], y1 = 22,col="dodgerblue",lwd=2)
+#segments(x0 = 3+X$lambda[1], y0=0, x1 = 3+X$lambda[1], y1 = 23,col="dodgerblue",lty="dashed")
+segments(x0 = 1.5+3*X$lo[2], y0=23, x1 = 1.5+3*X$hi[2], y1 = 23,col="orange",lwd=2)
+#segments(x0 = 3+X$lambda[2], y0=0, x1 = 3+X$lambda[2], y1 = 23,col="orange",lty="dashed")
+
+counts <- table(subset(db0,Species=="Baboon")$Forest,subset(db0,Species=="Baboon")$Richness2)
+par(mar=c(4,4,0,1))
+df.bar <- barplot(as.matrix(counts), ylab="",
+                  xlab="", col=c("dodgerblue","orange"),
+                  beside=TRUE,ylim=c(0,29))
+df.bar
+mtext("Host Parasite Richness",side=1,line=2.5,cex=1.,font=2)
+mtext("Number of samples",side=2,line=2.5,cex=1.,font=2)
+text(1,25,"B",cex=1)
+text(15,25,substitute(italic("Papio cynocephalus")),cex=1)
+points(1.5+3*X$lambda[3:4],c(22,23),pch=19,col=c("dodgerblue","orange"))
+segments(x0 = 1.5+3*X$lo[3], y0=22, x1 = 1.5+3*X$hi[3], y1 = 22,col="dodgerblue",lwd=2)
+segments(x0 = 1.5+3*X$lo[4], y0=23, x1 = 1.5+3*X$hi[4], y1 = 23,col="orange",lwd=2)
+dev.off()
+
 # full model richness
 m0 <- glm(Richness2~Forest*Species + AltitudeSD,family=poisson, data=db0)
 m1 <- glm(Richness2~Forest*Species ,family=poisson, data=db0)
@@ -609,8 +602,8 @@ summary(m2)
 library(multcomp)
 m3 <- glht(m2, linfct = mcp(Forest_Species = "Tukey"))
 m3
-#tiff("PairWise_v2.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
-pdf("FigureS2.pdf", width = 6, height = 4)
+tiff("FigureS2.tiff", width = 6, height = 4, units = 'in', res = 300,compression = 'lzw')
+#pdf("FigureS2.pdf", width = 6, height = 4)
 par(mar=c(3.5,9,2,2))
 plot(m3,main="",xlab="")
 mtext(text="95% family-wise confidence level",side=3,line=0.5,font=2,cex=1.2)
