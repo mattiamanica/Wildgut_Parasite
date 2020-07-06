@@ -6,7 +6,7 @@ Loss of protozoan and metazoan intestinal symbiont biodiversity in wild primates
 
 Authors: Claudia Barelli, Barbora Pafčo, Mattia Manica, Francesco Rovero, Roberto Rosà, David Modrý & Heidi C. Hauffe *
 
-Scientific Reports 10, 10917 (2020). https://doi.org/10.1038/s41598-020-67959-7 https://doi.org/10.3390/ijerph17113960 (registering DOI)
+Scientific Reports 10, 10917 (2020). https://doi.org/10.1038/s41598-020-67959-7 
 https://www.nature.com/articles/s41598-020-67959-7
 
 Received
